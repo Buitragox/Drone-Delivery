@@ -1,4 +1,4 @@
-{% extends "base.html" %} 
+{% extends "./base.html" %} 
 {% block title %}Home{% endblock %} 
 
 {% block body %}
@@ -10,17 +10,16 @@
             <a href=""> Reportes </a>
             <a href=""> Pedidos </a>
             <a href=""> Mantenimientos </a>
+            <a href="/admin/createUser/"> Crear </a>
         </div>
             
         <a href="/logout/">
             Log Out
         </a>
     </nav>
-
     {% endblock %}
 
-    <div>
-        Hello world!
-        <!-- <h1><a href= "/login"> Ingresar</a></h1> -->
-    </div>
+    {% block body_home %}
+    {% endblock %}
+
 {% endblock %}
