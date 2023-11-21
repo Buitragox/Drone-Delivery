@@ -1,6 +1,24 @@
 {% extends "base.html" %} 
 {% block title %}Home{% endblock %} 
+
 {% block body %}
+    {% block navbar %}
+    <nav class="flex flex-row w-full bg-sky-500 p-4 justify-between font-bold text-black">
+        <div class="space-x-4">
+            <a href="/admin/"> Inicio </a>
+            <a href=""> Robots y Drones </a>
+            <a href=""> Reportes </a>
+            <a href=""> Pedidos </a>
+            <a href=""> Mantenimientos </a>
+        </div>
+            
+        <a href="/logout/">
+            Log Out
+        </a>
+    </nav>
+
+    {% endblock %}
+
     <div>
         Hello world!
         <!-- <h1><a href= "/login"> Ingresar</a></h1> -->
