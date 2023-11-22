@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
 
 from flask import Flask, render_template, request, redirect, flash, session
@@ -10,7 +9,6 @@ from utils.db import db
 
 # Routes
 from routes.admin import admin
-
 
 def create_app():
     app = Flask(__name__)
@@ -30,7 +28,6 @@ def create_app():
     
     @app.route('/login', methods=['POST', 'GET'])
     def login():
-        
         return redirect("/admin")
 
     return app
