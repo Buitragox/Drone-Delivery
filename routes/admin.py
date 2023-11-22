@@ -1,11 +1,19 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session, jsonify
 from utils.hash import hash_pass
-from models.user import user_account
-from sqlalchemy import insert
+from sqlalchemy import insert, select
+from sqlalchemy.exc import IntegrityError
 from utils.db import db
 import requests
+from os import getenv
+
+from models.user import user_account
+from models.robot_drone import robot_drone
+from models.robot_state import robot_states
+from models.maintenance import maintenance
 
 admin = Blueprint("admin", __name__, static_folder="static", template_folder="templates")
+
+google_api_key = getenv("GOOGLE_API_KEY")
 
 
 @admin.before_request
@@ -50,7 +58,8 @@ def weather_data():
 
 @admin.route('/')
 def home():
-    return render_template("home.html", weather_data = update_weather())
+    api_url = "https://maps.googleapis.com/maps/api/js?key=" + google_api_key + "&callback=initMap"
+    return render_template("home.html", weather_data=update_weather(), google_api_url=api_url)
 
 
 @admin.route('/create_user/', methods=['GET', 'POST'])
@@ -82,7 +91,60 @@ def create_user():
 
 @admin.route('robots_drones', methods=["GET"])
 def robots_drones():
-    if request.method == 'GET':
-        rows = [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]]
-        return render_template("robotsDrones.html", rows=rows)
 
+    query = select(robot_drone, robot_states).where(robot_drone.c.robot_state == robot_states.c.robot_state)
+    rows = db.session.execute(query).all()
+    data = [[row.robot_id, ("Robot" if int(row.robot_type) == 0 else "Dron"), row.robot_reference, row.state_name] for row in rows]
+        
+    return render_template("robotsDrones.html", rows=data)
+
+
+
+@admin.route('/registrar_mantenimiento/', methods=['GET', 'POST'])
+def registrar_mantenimiento():
+    if request.method == 'POST':
+        robot_id = request.form['robot_id']
+        maintenance_date = request.form['maintenance_date']
+        technician_id = request.form['technician_id']
+        description = request.form['description']
+        
+        query = insert(maintenance).values(robot_id=robot_id, 
+                                           maintenance_date=maintenance_date, 
+                                           technician_id=technician_id, 
+                                           description=description)
+        try:
+            db.session.execute(query)
+            db.session.commit()
+            flash('Registro realizado con éxito', 'success')
+        except IntegrityError:
+            flash("Información invalida", "error")
+
+        return render_template('registrarMantenimiento.html')
+    
+    elif request.method == 'GET':
+        return render_template('registrarMantenimiento.html')
+    
+
+@admin.route('/registrar_robot/', methods=['GET', 'POST'])
+def registrar_robot():
+    if request.method == 'POST':
+        robot_type = request.form['robot_type']
+        robot_reference = request.form['robot_reference']
+        
+        query = insert(robot_drone).values(robot_type=robot_type, 
+                                           robot_reference=robot_reference,
+                                           robot_state=1)
+        print(query)
+        
+        try:
+            db.session.execute(query)
+            db.session.commit()
+            flash('Registro realizado con éxito', 'success')
+        except IntegrityError as e:
+            print(e)
+            flash("Información invalida", "error")
+
+        return render_template('registrarRobot.html')
+    
+    elif request.method == 'GET':
+        return render_template('registrarRobot.html')
