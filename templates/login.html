@@ -8,31 +8,46 @@
 
 {% block body %}
 <div class="container text-center">
-    <h1>UwUlivery</h1>
+    <h1 class="text-6xl font-bold mb-4">UwUlivery</h1>
+
     <form class="form-signin" action="/login" method="POST">
-        <!-- <img class="mb-4" src="{{ url_for('static', filename='img/logo.png') }}" alt="" width="190" height="90"> -->
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <br />
-                {% for message in messages %}
-                    <div class="alert alert-primary alert-dismissible" role="alert">
-                        <strong>{{ message }}</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
         <h1 class="h3 mb-3 fw-normal">Inicie sesión</h1>
+    
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            <div class="w-full">
+                {% if messages %}
+                    <br />
+                    {% for category, message in messages %}
+                        {% if category == "error" %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>{{ message }}</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                <img src="{{ url_for('static', filename='img/close.png') }}" alt="" width="24" height="24">
+                            </button>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                            <strong>{{ message }}</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                <img src="{{ url_for('static', filename='img/close.png') }}" alt="" width="24" height="24">
+                            </button>
+                        </div>
+                        {% endif %}
+                        
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endwith %}
         
         <div class="form-floating">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Usuario">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
             <label for="username">Username</label>
         </div>
         <div class="form-floating mt-2">
-            <input type="password" class="form-control" name="password" placeholder="Contraseña">
+            <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
             <label for="password">Password</label>
         </div>
-        <button class="w-100 btn btn-lg btn-secondary" type="submit">Sign in</button>
+        <button class="w-full btn btn-lg bg-slate-600 hover:bg-slate-500 text-white" type="submit">Sign in</button>
     </form>
 </div>
 {% endblock %}
