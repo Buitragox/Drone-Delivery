@@ -1,10 +1,37 @@
 {% extends './home.html' %}
-{% block title %}Create User{% endblock %} 
+{% block title %}Crear Usuario{% endblock %} 
 
 {% block body_home %}
 <div class="container mx-auto mt-8 grid justify-items-center">
     <h2 class="text-2xl font-bold mb-4">Crear Nuevo Usuario</h2>
-    <form action="/createUser/" method="post" class="flex flex-col w-2/6 align-middle">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        <div class="w-2/6">
+            {% if messages %}
+                <br />
+                {% for category, message in messages %}
+                    {% if category == "error" %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <img src="{{ url_for('static', filename='img/close.png') }}" alt="" width="24" height="24">
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <img src="{{ url_for('static', filename='img/close.png') }}" alt="" width="24" height="24">
+                        </button>
+                    </div>
+                    {% endif %}
+                    
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endwith %}
+    
+    <form action="/admin/create_user/" method="post" class="flex flex-col w-2/6 align-middle">
         <label for="username">Usuario:</label>
         <input type="text" id="username" name="username" maxlength="30" required class="border p-2 mb-4">
 
@@ -15,7 +42,7 @@
         <input type="email" id="email" name="email" required class="border p-2 mb-4">
         
         <div class="grid justify-items-center">
-            <button type="submit" class="bg-blue-500 text-white p-2 w-2/6">Crear Usuario</button>
+            <button type="submit" class="bg-blue-500 text-white p-2 w-2/6 rounded hover:bg-blue-400">Crear Usuario</button>
         </div>
     </form>
 </div>
