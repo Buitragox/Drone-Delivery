@@ -1,12 +1,10 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, jsonify
 from utils.hash import hash_pass
 from models.user import user_account
 from sqlalchemy import insert
 from utils.db import db
-
 import requests
 
-from flask import jsonify
 admin = Blueprint("admin", __name__, static_folder="static", template_folder="templates")
 
 
