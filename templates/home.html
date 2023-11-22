@@ -22,4 +22,38 @@
     {% block body_home %}
     {% endblock %}
 
+
+    <div>
+        <head>
+    <script>
+        function actualizarClima()
+        {
+            fetch('/admin/weather_data')
+                .then(data => {
+                    // Actualiza los elementos de tu página con los nuevos datos
+                    document.getElementById('city').textContent = data.city;
+                    document.getElementById('temperature').textContent = data.temperature;
+                    document.getElementById('temperature_min').textContent = data.temperature_min;
+                    document.getElementById('temperature_max').textContent = data.temperature_max;
+                    document.getElementById('humidity').textContent = data.humidity;
+                    document.getElementById('speed').textContent = data.speed;
+                    document.getElementById('description').textContent = data.description;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        setInterval(actualizarClima, 300000);
+        </script>
+        </head>
+        <body class="bg-gray-200 p-8">
+            <div class="max-w-md mx-auto bg-white rounded p-6 shadow-md">
+                <h1 class="text-2xl font-bold mb-4">Weather in <span id="city">{{ weather_data['city'] }}</span></h1>
+                <p class="text-lg">Temperature: <span id="temperature">{{ weather_data['temperature'] }}</span>°C</p>
+                <p class="text-lg">Temperature Max: <span id="temperature_min">{{ weather_data['temperature_min'] }}</span>°C</p>
+                <p class="text-lg">Temperature Min: <span id="temperature_max">{{ weather_data['temperature_max'] }}</span>°C</p>
+                <p class="text-lg">Humidity: <span id="humidity">{{ weather_data['humidity'] }}</span>%</p>
+                <p class="text-lg">Wind speed: <span id="speed">{{ weather_data['speed'] }}</span>km/h</p>
+                <p class="text-lg">Description: <span id="speed">{{ weather_data['description'] }}</span></p>
+            </div>
+        </body>
+    </div>
 {% endblock %}

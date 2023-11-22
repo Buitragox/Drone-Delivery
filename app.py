@@ -1,6 +1,5 @@
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
 
 from flask import Flask, render_template, request, redirect, flash, session
@@ -13,7 +12,6 @@ from models.user import user_account
 
 # Routes
 from routes.admin import admin
-
 
 def create_app():
     app = Flask(__name__)
@@ -67,5 +65,6 @@ def create_app():
         session.pop("user_name", None)
         session.pop("user_id", None)
         return redirect("/")
+
 
     return app
