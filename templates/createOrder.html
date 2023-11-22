@@ -1,0 +1,78 @@
+{% extends './home.html' %}
+{% block title %}Registrar Reserva{% endblock %} 
+
+{% block body_home %}
+<div class="container mx-auto mt-8 grid justify-items-center">
+    <h2 class="text-2xl font-bold mb-4">Crear reserva</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        <div class="w-2/6">
+            {% if messages %}
+                <br />
+                {% for category, message in messages %}
+                    {% if category == "error" %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <img src="{{ url_for('static', filename='img/close.png') }}" alt="" width="24" height="24">
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                            <img src="{{ url_for('static', filename='img/close.png') }}" alt="" width="24" height="24">
+                        </button>
+                    </div>
+                    {% endif %}
+                    
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endwith %}
+    
+    <form action="/admin/create_order/" method="post" class="flex flex-col w-2/6 align-middle">
+        <label for="iden">Identificación:</label>
+        <input type="number" id="iden" name="iden" maxlength="30" required class="border p-2 mb-4">
+
+        <label for="name">Nombre y apellido:</label>
+        <input type="text" id="name" name="name" maxlength="30" required class="border p-2 mb-4">
+
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" required class="border p-2 mb-4">
+        
+        <label for="nameadmin">Nombre admin:</label>
+        <input type="text" id="nameadmin" name="nameadmin" maxlength="30" required class="border p-2 mb-4">
+
+        <label for="dron">Robot/Dron asignado:</label>
+        <input type="text" id="drom" name="dron" maxlength="30" required class="border p-2 mb-4">
+
+        <label for="service">Tipo de servicio:</label>
+        <label>
+            <input type="radio" name="opcion" value="opcion1" maxlength="30" required class="border p-2 mb-4"> Grabación de evento
+        </label>
+        <label>
+            <input type="radio" name="opcion" value="opcion2" maxlength="30" required class="border p-2 mb-4"> Entrega
+        </label>
+        <label for="horaini">Hora de inicio:</label>
+        <input type="datetime" id="horaini" name="horaini" maxlength="30" required class="border p-2 mb-4">
+
+        <label for="horafini">Hora de finalización:</label>
+        <input type="datetime" id="horafini" name="horafini" maxlength="30" required class="border p-2 mb-4">
+
+        <label for="descrip">Descripción breve:</label>
+        <input type="text" id="descrip" name="descrip" maxlength="100" required class="border p-2 mb-4">
+
+        <label for="zona">Zona entrega:</label>
+        <input type="text" id="zona" name="zona" maxlength="50" required class="border p-2 mb-4">
+
+        <label for="zonafini">Zona finalización:</label>
+        <input type="text" id="zonafini" name="zonafini" maxlength="50" required class="border p-2 mb-4">
+
+        <div class="grid justify-items-center">
+            <button type="submit" class="bg-blue-500 text-white p-2 w-2/6 rounded hover:bg-blue-400">Crear orden</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

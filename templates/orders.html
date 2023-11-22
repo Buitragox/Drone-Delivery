@@ -9,16 +9,23 @@
     <ul>
         {% for pedido in pedidos %}
             <li class="bg-white rounded-md shadow p-4 mb-4">
+                <strong class="block mb-2">Identificación:</strong> {{ pedido['iden'] }}<br>
                 <strong class="block mb-2">Nombre:</strong> {{ pedido['nombre'] }}<br>
-                <strong class="block mb-2">Carrera:</strong> {{ pedido['carrera'] }}<br>
+                <strong class="block mb-2">Correo:</strong> {{ pedido['email'] }}<br>
+                <strong class="block mb-2">Nombre admin:</strong> {{ pedido['nameadmin'] }}<br>
+                <strong class="block mb-2">Dron/Robot asignado:</strong> {{ pedido['dron'] }}<br>
+                <strong class="block mb-2">Tipo de servicio:</strong> {{ pedido['service'] }}<br>
+                <strong class="block mb-2">Hora inicio:</strong> {{ pedido['horainicio'] }}<br>
+                <strong class="block mb-2">Hora fin:</strong> {{ pedido['horafinal'] }}<br>
                 <strong class="block mb-2">Descripción:</strong> {{ pedido['descripcion'] }}<br>
-                <strong class="block mb-2">Correo Electrónico:</strong> {{ pedido['email'] }}<br>
-                <strong class="block mb-2">Número de Teléfono:</strong> {{ pedido['telefono'] }}<br>
-
+                <strong class="block mb-2">Zona inicio servicio:</strong> {{ pedido['zona'] }}<br>
+                <strong class="block mb-2">Zona de finalización:</strong> {{ pedido['zonafinal'] }}<br>
                 <form action="/admin/aceptar/{{ pedido['id'] }}" method="get" class="mt-4">
                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Aceptar</button>
+                </form>
                 <form action="/admin/rechazar/{{ pedido['id'] }}" method="get" class="mt-4">
                     <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md">Rechazar</button>
+                </form>
             </li>
         {% endfor %}
     </ul>
