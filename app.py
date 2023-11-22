@@ -29,5 +29,5 @@ def create_app():
     @app.route('/login', methods=['POST', 'GET'])
     def login():
         return redirect("/admin")
-    
+
     return app
