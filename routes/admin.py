@@ -4,6 +4,7 @@ from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 from utils.db import db
 import requests
+
 from os import getenv
 
 from models.user import user_account
@@ -11,10 +12,20 @@ from models.robot_drone import robot_drone
 from models.robot_state import robot_states
 from models.maintenance import maintenance
 
-admin = Blueprint("admin", __name__, static_folder="static", template_folder="templates")
+import qrcode
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+from email.mime.text import MIMEText
 
+admin = Blueprint("admin", __name__, static_folder="static", template_folder="templates")
 google_api_key = getenv("GOOGLE_API_KEY")
 
+pedidos = [
+    {"id": 1, "nombre": "Dilan Correa", "carrera": "Ingenieria Sistemas", "descripcion": "Rodilla", "email": "dilancito2546@gmail.com", "telefono": "123456789"},
+    {"id": 2, "nombre": "Jhoan Buitrago", "carrera": "Ingenieria Sistemas", "descripcion": "Chocolate", "email": "jhoanuitrago@gmail.com", "telefono": "987654321"}
+]
 
 @admin.before_request
 def before_request():
@@ -88,6 +99,73 @@ def create_user():
     elif request.method == 'GET':
         return render_template('createUser.html')
     
+@admin.route('/aceptar/<int:pedido_id>')
+def aceptar_pedido(pedido_id):
+    pedido = next((p for p in pedidos if p['id'] == pedido_id), None)
+    if pedido:
+        send_qr(pedido['email'])
+        pedidos.remove(pedido)
+        return render_template('orders.html', pedidos = pedidos)
+    else:
+        return "Pedido no encontrado."
+    
+@admin.route('/rechazar/<int:pedido_id>')
+def rechazar_pedido(pedido_id):
+    pedido = next((p for p in pedidos if p['id'] == pedido_id), None)
+    if pedido:
+        pedidos.remove(pedido)
+        return render_template('orders.html', pedidos = pedidos)
+    else:
+        return "Pedido no encontrado."
+    
+def send_qr(email):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(email)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save("qr.png")
+
+    subject = 'Código QR para tu pedido'
+    body = 'Adjunto encontrarás el código QR para tu pedido.'
+    sender_email = 'uwudelivery150@gmail.com'
+    sender_password = getenv("PASSWORD")
+
+    message = MIMEMultipart()
+    message['From'] = sender_email
+    message['To'] = email
+    message['Subject'] = subject
+    message.attach(MIMEText(body, 'plain'))
+    attachment = open("qr.png", "rb")
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload((attachment).read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', "attachment; filename= qr.png")
+
+    message.attach(part)
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+    try:
+        server.login(sender_email, sender_password)
+    except smtplib.SMTPException as e:
+        print(f"Error al iniciar sesión: {e}")
+    server.login(sender_email, sender_password)
+    text = message.as_string()
+    server.sendmail(sender_email, email, text)
+    server.quit()
+    
+@admin.route( '/orders/', methods=[ 'GET', 'POST'] )
+def orders():
+    return render_template('orders.html', pedidos = pedidos)
+
 
 @admin.route('robots_drones', methods=["GET"])
 def robots_drones():
