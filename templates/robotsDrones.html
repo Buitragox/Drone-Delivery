@@ -3,25 +3,27 @@
 
 {% block body_home %}
 <div class="grid justify-items-center pt-4 space-y-4">
-    <h2 class="font-bold text-2xl">Listado de Robots y Drones </h2>
+    <h2 class="font-bold text-2xl">Listado de Robots y Drones</h2>
+
+    <a class="border bg-blue-500 p-2 rounded-md text-white hover:bg-blue-400" href="/admin/registrar_robot">Registrar</a>
 
     <table class="table-auto border-2 border-black">
         <thead>
             <tr>
-                <th class="border-2 border-slate-700 p-1">ID</th>
-                <th class="border-2 border-slate-700 p-1">Tipo</th>
-                <th class="border-2 border-slate-700 p-1">Referencia</th>
-                <th class="border-2 border-slate-700 p-1">Estado</th>
+                <th class="border-2 border-slate-700 p-2">ID</th>
+                <th class="border-2 border-slate-700 p-2">Tipo</th>
+                <th class="border-2 border-slate-700 p-2">Referencia</th>
+                <th class="border-2 border-slate-700 p-2">Estado</th>
             </tr>
         </thead>
         
         <tbody>
             {% for data in rows %}
             <tr>
-                <td class="border-2 border-slate-700 p-1">{{data[0]}}</td>
-                <td class="border-2 border-slate-700 p-1">{{data[1]}}</td>
-                <td class="border-2 border-slate-700 p-1">{{data[2]}}</td>
-                <td class="border-2 border-slate-700 p-1">{{data[3]}}</td>
+                <td class="border-2 border-slate-700 p-2">{{data[0]}}</td>
+                <td class="border-2 border-slate-700 p-2">{{data[1]}}</td>
+                <td class="border-2 border-slate-700 p-2">{{data[2]}}</td>
+                <td class="border-2 border-slate-700 p-2">{{data[3]}}</td>
             </tr>
             {% endfor %}
         </tbody>

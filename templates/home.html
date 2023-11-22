@@ -7,9 +7,8 @@
         <div class="space-x-4">
             <a href="/admin/"> Inicio </a>
             <a href="/admin/robots_drones"> Robots y Drones </a>
-            <a href=""> Reportes </a>
+            <a href="/admin/registrar_mantenimiento/"> Mantenimientos </a>
             <a href="/admin/orders"> Pedidos </a>
-            <a href=""> Mantenimientos </a>
             <a href="/admin/create_user/"> Crear </a>
         </div>
             
@@ -42,7 +41,7 @@
         </script>
     </head> 
     <div id="map" class="w-96 h-96 bg-gray-300 rounded-md mx-auto"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYSBXtKpW_TanSHtLD1k1gDxFt9_tiym8&callback=initMap" async defer></script>
+    <script src={{google_api_url}} async defer></script>
     
     <script>
         function initMap() {
