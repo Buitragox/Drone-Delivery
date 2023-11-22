@@ -125,6 +125,7 @@ def send_qr(email):
         box_size=10,
         border=4,
     )
+    
     qr.add_data(email)
     qr.make(fit=True)
 
@@ -157,7 +158,6 @@ def send_qr(email):
         server.login(sender_email, sender_password)
     except smtplib.SMTPException as e:
         print(f"Error al iniciar sesión: {e}")
-    server.login(sender_email, sender_password)
     text = message.as_string()
     server.sendmail(sender_email, email, text)
     server.quit()
