@@ -10,13 +10,12 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 from email.mime.text import MIMEText
-import os
+import os, re
 from dotenv import load_dotenv
 admin = Blueprint("admin", __name__, static_folder="static", template_folder="templates")
 
 pedidos = [
-    {"id": 1, "nombre": "Dilan Correa", "carrera": "Ingenieria Sistemas", "descripcion": "Rodilla", "email": "dilancito2546@gmail.com", "telefono": "123456789"},
-    {"id": 2, "nombre": "Jhoan Buitrago", "carrera": "Ingenieria Sistemas", "descripcion": "Chocolate", "email": "jhoanuitrago@gmail.com", "telefono": "987654321"}
+    
 ]
 
 @admin.before_request
@@ -89,6 +88,37 @@ def create_user():
     
     elif request.method == 'GET':
         return render_template('createUser.html')
+
+@admin.route('/create_order/', methods=['GET', 'POST'])
+def create_order():
+    if request.method == 'POST':
+        iden = request.form['iden']
+        print(type(iden), iden)
+        if len(iden) < 10:
+            flash('Coloque correctamente su identificación', 'error')
+            return render_template('createOrder.html')
+        name = request.form['name']
+        email = request.form['email']
+        nameadmin = request.form['nameadmin']
+        dron = request.form['dron']
+        service = request.form['opcion']
+        if service == 'opcion1': service = 'Grabación de evento'
+        else: service = 'Entrega'
+        horaini = request.form['horaini']
+        horafinal = request.form['horafini']
+        descrip = request.form['descrip']
+        patron_hora = re.compile(r'^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$')
+        if not (patron_hora.match(horaini) or patron_hora.match(horafinal)):
+            flash('Debe ser una hora permitida (HH:MM:SS)', 'error')
+            return render_template('createOrder.html')
+        zona = request.form['zona']
+        zonafini = request.form['zonafini']
+        pedidos.append( {'id': len(pedidos), 'identificacion': iden, 'nombre': name, 'email': email, 'nameadmin': nameadmin, 
+                         'dron': dron, 'service': service, 'horainicio': horaini, 'horafinal': horafinal, 'descripcion': descrip,
+                         'zona': zona, 'zonafinal': zonafini} )
+        return render_template('createOrder.html')
+    elif request.method == 'GET':
+        return render_template('createOrder.html')
     
 @admin.route('/aceptar/<int:pedido_id>')
 def aceptar_pedido(pedido_id):
