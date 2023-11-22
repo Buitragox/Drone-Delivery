@@ -14,7 +14,7 @@
         <h1 class="h3 mb-3 fw-normal">Inicie sesión</h1>
     
         {% with messages = get_flashed_messages(with_categories=true) %}
-            <div class="w-2/6">
+            <div class="w-full">
                 {% if messages %}
                     <br />
                     {% for category, message in messages %}
@@ -40,11 +40,11 @@
         {% endwith %}
         
         <div class="form-floating">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Usuario">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
             <label for="username">Username</label>
         </div>
         <div class="form-floating mt-2">
-            <input type="password" class="form-control" name="password" placeholder="Contraseña">
+            <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
             <label for="password">Password</label>
         </div>
         <button class="w-full btn btn-lg bg-slate-600 hover:bg-slate-500 text-white" type="submit">Sign in</button>

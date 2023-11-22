@@ -1,5 +1,5 @@
 {% extends './home.html' %}
-{% block title %}Create User{% endblock %} 
+{% block title %}Crear Usuario{% endblock %} 
 
 {% block body_home %}
 <div class="container mx-auto mt-8 grid justify-items-center">
@@ -31,7 +31,7 @@
         </div>
     {% endwith %}
     
-    <form action="/admin/createUser/" method="post" class="flex flex-col w-2/6 align-middle">
+    <form action="/admin/create_user/" method="post" class="flex flex-col w-2/6 align-middle">
         <label for="username">Usuario:</label>
         <input type="text" id="username" name="username" maxlength="30" required class="border p-2 mb-4">
 
@@ -42,7 +42,7 @@
         <input type="email" id="email" name="email" required class="border p-2 mb-4">
         
         <div class="grid justify-items-center">
-            <button type="submit" class="bg-blue-500 text-white p-2 w-2/6 rounded hover:bg-blue-300">Crear Usuario</button>
+            <button type="submit" class="bg-blue-500 text-white p-2 w-2/6 rounded hover:bg-blue-400">Crear Usuario</button>
         </div>
     </form>
 </div>

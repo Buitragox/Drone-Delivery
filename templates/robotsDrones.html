@@ -1,0 +1,30 @@
+{% extends './home.html' %}
+{% block title %}Robots y Drones{% endblock %} 
+
+{% block body_home %}
+<div class="grid justify-items-center pt-4 space-y-4">
+    <h2 class="font-bold text-2xl">Listado de Robots y Drones </h2>
+
+    <table class="table-auto border-2 border-black">
+        <thead>
+            <tr>
+                <th class="border-2 border-slate-700 p-1">ID</th>
+                <th class="border-2 border-slate-700 p-1">Tipo</th>
+                <th class="border-2 border-slate-700 p-1">Referencia</th>
+                <th class="border-2 border-slate-700 p-1">Estado</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for data in rows %}
+            <tr>
+                <td class="border-2 border-slate-700 p-1">{{data[0]}}</td>
+                <td class="border-2 border-slate-700 p-1">{{data[1]}}</td>
+                <td class="border-2 border-slate-700 p-1">{{data[2]}}</td>
+                <td class="border-2 border-slate-700 p-1">{{data[3]}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
