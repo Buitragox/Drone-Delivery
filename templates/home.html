@@ -43,7 +43,32 @@
         }
         setInterval(actualizarClima, 300000);
         </script>
-        </head>
+        </head> 
+        <div id="map" class="w-96 h-96 bg-gray-300 rounded-md mx-auto"></div>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYSBXtKpW_TanSHtLD1k1gDxFt9_tiym8&callback=initMap" async defer></script>
+
+    <script>
+        function initMap() {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    var userLocation = { lat: position.coords.latitude, lng: position.coords.longitude };
+
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        center: userLocation,
+                        zoom: 15  
+                    });
+                    var marker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: 'Tu ubicación'
+                    });
+                },
+                function (error) {
+                    console.error('Error al obtener la ubicación:', error);
+                }
+            );
+        }
+    </script>
         <body class="bg-gray-200 p-8">
             <div class="max-w-md mx-auto bg-white rounded p-6 shadow-md">
                 <h1 class="text-2xl font-bold mb-4">Weather in <span id="city">{{ weather_data['city'] }}</span></h1>
