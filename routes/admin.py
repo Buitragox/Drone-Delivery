@@ -1,7 +1,41 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, Flask
+import requests, threading, schedule, time
 
+from flask import jsonify
 admin = Blueprint("admin", __name__, static_folder="static", template_folder="templates")
+
+def update_weather():
+    weather_data = {
+    'city': '',
+    'temperature': '',
+    'temperature_min': '',
+    'temperature_max': '',
+    'humidity': '',
+    'speed': '',
+    'description': ''
+    }
+    API_Wather = 'https://api.openweathermap.org/data/2.5/weather?q=Cali,co&APPID=bfc0a02f830fcebeea7ef589dacd1b1a'
+    response = requests.get(API_Wather)
+    if response.status_code == 200:
+        data = response.json()
+        weather_data['city'] = 'Cali'
+        weather_data['temperature'] = data['main']['temp'] - 273.15
+        weather_data['temperature_min'] = data['main']['temp_min'] - 273.15
+        weather_data['temperature_max'] = data['main']['temp_max'] - 273.15
+        weather_data['humidity'] = data['main']['humidity']
+        weather_data['speed'] = round(data['wind']['speed'] * 18/5,2)
+        weather_data['description'] = data['weather'][0]['description']
+        return weather_data
+    else:
+        # Si la solicitud no fue exitosa, imprime el código de estado
+        print(f'Error en la solicitud. Código de estado: {response.status_code}')
+        return {}
+
+@admin.route('/weather_data')
+def weather_data():
+    data = update_weather()
+    return jsonify(data)
 
 @admin.route('/')
 def home():
-    return render_template("home.html")
+    return render_template("home.html", weather_data = update_weather())
