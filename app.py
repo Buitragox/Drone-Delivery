@@ -42,6 +42,7 @@ def create_app():
 
             query = select(user_account).where(user_account.c.user_name == user) \
                     .where(user_account.c.user_password == hashed_pass)
+            print(query)
 
             result = db.session.execute(query).first()
 

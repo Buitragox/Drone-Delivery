@@ -10,7 +10,7 @@ admin = Blueprint("admin", __name__, static_folder="static", template_folder="te
 
 @admin.before_request
 def before_request():
-    if not "user_name" in session:
+    if request.endpoint != "admin.weather_data" and not "user_name" in session:
         return redirect(url_for("login"))
 
      
